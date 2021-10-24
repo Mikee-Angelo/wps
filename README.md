@@ -1,65 +1,101 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+# SBCI Web-based Payment System
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+# Get Started 
+There are two ways of installing the system. Better use with [Docker].
 
-## About Laravel
+## How to install ?
+The following are the steps on how to install the system.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Alternative installation is possible without local dependencies relying on [Docker].
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Clone the repository
+```
+git clone https://github.com/Mikee-Angelo/wps.git
+```
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Switch to the extracted repo folder
+```
+cd asms-main
+```
 
-## Learning Laravel
+Install all the dependencies using composer. __Better to install__ [composer](https://getcomposer.org/download/)
+```
+composer install
+```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Copy `.env.example` and rename to `.env` manually or you can use this command.
+```
+cp .env.example .env
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+After copying fillup the following important parameters found in `.env`
+```
+DB_HOST=127.0.0.1 or localhost
+DB_DATABASE=NAME_OF_YOUR_DATABASE
+DB_USERNAME=DB_SERVER_USERNAME
+DB_PASSWORD=DB_SERVER_PASSWORD
+```
 
-## Laravel Sponsors
+Generate new application key 
+```
+php artisan key:generate
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+Publish `laravel-permission` for roles and permission function 
+```
+php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider"
+```
 
-### Premium Partners
+Clear config cache 
+```
+php artisan optimize:clear
+or 
+php artisan config:clear
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[CMS Max](https://www.cmsmax.com/)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+Run the database migration (__Always check you configuration of database on your .env file to prevent error when migrating__)
+```
+php artisan migrate
+```
 
-## Contributing
+Lastly, run the server then you can open http://localhost:8000
+```
+php artisan serve
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Database Seeding
+__Populate the database with the seed data which includes the default account of the super admin and the default roles of the system__
 
-## Code of Conduct
+Open database seeder `DatabaseSeeder` and set the property values as per your requirement. You can also change the default account credentials of the Super Admin.
+```
+database/seeders/DatabaseSeeders.php
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Run the database seeder command
+```
+php artisan db:seed
+```
 
-## Security Vulnerabilities
+__*Note*__: It's recommended to clean first your database before seeding. Refresh your database by using this command
+```
+php artisan migrate:refresh
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## Docker
+This is my recommended way of installing so you will not install all the required tools. Just download [Docker](https://www.docker.com/products/docker-desktop)
 
-## License
+Run the following commands: 
+```
+git clone https://github.com/Mikee-Angelo/wps.git
+cd wps-main
+cp .env.example .env #follow changing of parameter in option 1
+docker-compose up -d
+docker-compose run --rm composer install
+docker-compose exec php php artisan key:generate
+docker-compose exec php php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider"
+docker-compose exec php php  artisan optimize:clear or docker-compose exec php php artisan config:clear
+docker-compose exec php php artisan migrate
+```
+The api can be accessed at http://localhost:8000
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+#### Good luck, Cheers !!!
