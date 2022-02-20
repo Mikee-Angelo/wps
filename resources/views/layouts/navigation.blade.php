@@ -16,6 +16,21 @@
                         {{ __('Dashboard') }}
                     </x-nav-link>
                 </div>
+
+                <!-- Paymongo Payment Methods -->
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="route('payment-method')" :active="request()->routeIs('payment-method')">
+                        {{ __('Payments') }}
+                    </x-nav-link>
+                </div>
+
+                <!-- Paymongo Payment Methods -->
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="route('payment-methods')" :active="request()->routeIs('payment-methods')">
+                        {{ __('Payment Methods') }}
+                    </x-nav-link>
+                </div>
+
             </div>
 
             <!-- Settings Dropdown -->
